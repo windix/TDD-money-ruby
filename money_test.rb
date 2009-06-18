@@ -20,5 +20,7 @@ class MoneyTest < Test::Unit::TestCase
     
     assert(Franc.new(5) == Franc.new(5))
     assert_equal(false, Franc.new(5) == Franc.new(6))
+    
+    assert_equal(false, Dollar.new(5) == Franc.new(5))
   end
 end

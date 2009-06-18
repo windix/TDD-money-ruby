@@ -7,7 +7,7 @@ class Money
   end
 
   def ==(money)
-    @amount == money.amount
+    self.class == money.class && @amount == money.amount
   end
 end
 
