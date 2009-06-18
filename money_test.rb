@@ -70,14 +70,43 @@ class MoneyTest < Test::Unit::TestCase
   end
 
   def test_mixed_addition
+    five_bucks, ten_francs, bank = init_bank
+  
+    result = bank.reduce(five_bucks.plus(ten_francs), "USD")
+    assert_equal(Money.dollar(10), result)
+  end
+
+  def test_sum_plus_money
+    five_bucks, ten_francs, bank = init_bank
+    
+    sum = Sum.new(five_bucks, ten_francs).plus(five_bucks)
+    result = bank.reduce(sum, "USD")
+    assert_equal(Money.dollar(15), result)
+  end
+
+  def test_sum_times
+    five_bucks, ten_francs, bank = init_bank
+    
+    sum = Sum.new(five_bucks, ten_francs).times(2)
+    result = bank.reduce(sum, "USD")
+    assert_equal(Money.dollar(20), result)
+  end
+
+  private 
+  def init_bank
     five_bucks = Money.dollar(5)
     ten_francs = Money.franc(10)
 
     bank = Bank.new
     bank.add_rate("CHF", "USD", 2)
-  
-    result = bank.reduce(five_bucks.plus(ten_francs), "USD")
-    assert_equal(Money.dollar(10), result)
+    
+    [five_bucks, ten_francs, bank]
+  end
+
+  def test_plus_same_currency
+    sum = Money.dollar(1).plus(Money.dollar(1))
+    result = bank.reduce(sum, "USD")
+    assert_equal(Money.dollar(2), result)
   end
 
 end
