@@ -8,4 +8,8 @@ class Dollar
   def times(multiplier)
     Dollar.new(@amount * multiplier)
   end
+
+  def ==(dollar)
+    @amount == dollar.amount
+  end
 end
