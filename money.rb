@@ -9,29 +9,18 @@ class Money
   end
 
   def ==(money)
-    self.class == money.class && @amount == money.amount
+    self.currency == money.currency && @amount == money.amount
   end
 
   def self.dollar(amount)
-    # Chap 8: How to cast from Dollar to parent Money?
-    Dollar.new(amount, "USD")
+    Money.new(amount, "USD")
   end
   
   def self.franc(amount)
-    # Chap 8: How to cast from Dollar to parent Money?
-    Franc.new(amount, "CHF")
+    Money.new(amount, "CHF")
   end
-end
 
-class Dollar < Money
   def times(multiplier)
-    Money.dollar(@amount * multiplier)
+    Money.new(@amount * multiplier, @currency)
   end
 end
-
-class Franc < Money
-  def times(multiplier)
-    Money.franc(@amount * multiplier)
-  end
-end
-

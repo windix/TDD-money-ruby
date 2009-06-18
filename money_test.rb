@@ -17,10 +17,6 @@ class MoneyTest < Test::Unit::TestCase
   def test_equality
     assert(Money.dollar(5) == Money.dollar(5))
     assert_equal(false, Money.dollar(5) == Money.dollar(6))
-    
-    assert(Money.franc(5) == Money.franc(5))
-    assert_equal(false, Money.franc(5) == Money.franc(6))
-    
     assert_equal(false, Money.dollar(5) == Money.franc(5))
   end
 
