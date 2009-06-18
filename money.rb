@@ -1,3 +1,23 @@
+#class Pair
+#  attr_reader :from, :to
+#
+#  def initialize(from, to)
+#    @from, @to = from, to
+#  end
+#
+#  def ==(pair)
+#    @from == pair.from && @to == pair.to
+#  end
+#
+#  def eql?(o)
+#    o.is_a?(Pair) && self == o
+#  end
+#
+#  def hash
+#    (@from + @to).hash
+#  end
+#end
+
 class Money
   # Chap3: In ruby: this cannot be set to private
   attr_accessor :amount
@@ -25,18 +45,39 @@ class Money
   end
 
   def plus(addend)
-    #Money.new(@amount + addend.amount, @currency)
     Sum.new(self, addend)
   end
 
-  def reduce(to_currency)
-    self
+  def reduce(bank, to_currency)
+    rate = bank.rate(@currency, to_currency)
+    Money.new(@amount.to_f / rate, to_currency)
   end
 end
 
 class Bank
+  def initialize
+    @rates = {}
+  end
+  
   def reduce(source, to_currency)
-    source.reduce(to_currency)
+    source.reduce(self, to_currency)
+  end
+
+  def add_rate(from_currency, to_currency, rate)
+    #@rates[Pair.new(from_currency, to_currency)] = rate
+    @rates[rate_key(from_currency, to_currency)] = rate
+  end
+
+  def rate(from_currency, to_currency)
+    return 1 if from_currency == to_currency
+
+    #@rates[Pair.new(from_currency, to_currency)]
+    @rates[rate_key(from_currency, to_currency)]
+  end
+
+  private 
+  def rate_key(from_currency, to_currency)
+    from_currency.upcase + to_currency.upcase
   end
 end
 
@@ -48,7 +89,7 @@ class Sum
     @augend, @addend = augend, addend
   end
 
-  def reduce(to_currency)
+  def reduce(bank, to_currency)
     amount = @augend.amount + @addend.amount
     Money.new(amount, to_currency)
   end

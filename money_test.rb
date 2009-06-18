@@ -56,4 +56,17 @@ class MoneyTest < Test::Unit::TestCase
     assert_equal(Money.dollar(1), result)
   end
 
+  def test_reduce_money_different_currency
+    bank = Bank.new
+    bank.add_rate("CHF", "USD", 2)
+
+    result = bank.reduce(Money.franc(2), "USD")
+    assert_equal(Money.dollar(1), result)
+  end
+
+  def test_pair_equal
+    assert_equal(('CHF' + 'USD').hash, ('CHF' + 'USD').hash)
+    #assert(Pair.new('CHF', 'USD').eql?(Pair.new('CHF', 'USD')))
+  end
+
 end
